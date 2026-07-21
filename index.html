@@ -4,228 +4,441 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Store Pedia</title>
+    <!-- Google Fonts & FontAwesome for modern icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for monthly transaction graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background: linear-gradient(135deg, #007bff, #00c6ff); 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --accent: #06b6d4;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
-        .app-container { 
-            width: 100%; 
-            max-width: 480px; 
-            background: #ffffff; 
-            padding: 25px; 
-            border-radius: 14px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
         }
-        .logo-header {
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login Screen */
+        #login-section h2 {
             text-align: center;
+            margin-bottom: 8px;
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(to right, #818cf8, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #login-section p {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            position: relative;
             margin-bottom: 20px;
         }
-        .logo-header img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #007bff;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
         }
-        h1 { text-align: center; color: #222; font-size: 22px; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 13px; font-weight: 500; }
-        
-        .form-group { margin-bottom: 16px; }
-        label { display: block; font-weight: 600; margin-bottom: 6px; color: #444; font-size: 14px; }
-        input, select { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            font-size: 14px; 
-            background: #f9f9f9;
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
             transition: all 0.3s ease;
         }
-        input:focus, select:focus { 
-            border-color: #007bff; 
-            background: #fff;
-            outline: none; 
-            box-shadow: 0 0 5px rgba(0,123,255,0.2);
+
+        select {
+            padding-left: 45px;
+            appearance: none;
+            cursor: pointer;
         }
-        
-        .price-box { 
-            background: linear-gradient(135deg, #e8f4fd, #d0e8fc); 
-            padding: 15px; 
-            border-radius: 8px; 
-            text-align: center; 
-            margin-top: 20px; 
-            border: 1px solid #bce8f1;
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
         }
-        .price-box small { color: #555; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .price-box span { display: block; font-size: 22px; font-weight: bold; color: #0056b3; margin-top: 5px; }
-        
-        .payment-box { 
-            background: #fffcf4; 
-            border: 1px solid #ffeeba; 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-top: 20px; 
-            font-size: 13px; 
-            color: #444; 
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.2s;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
-        .payment-box h3 { font-size: 14px; margin-bottom: 10px; color: #856404; display: flex; align-items: center; gap: 5px; }
-        .payment-box p { margin-bottom: 6px; }
-        
-        .btn { 
-            width: 100%; 
-            background: #007bff; 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-size: 15px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 10px; 
-            transition: background 0.2s;
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
-        .btn:hover { background: #0056b3; }
-        
-        .btn-wa { 
-            background: #25d366; 
-            margin-top: 15px; 
-            text-decoration: none; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Dashboard Screen */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 16px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            width: auto;
+            box-shadow: none;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
-        .btn-wa:hover { background: #1ebe5d; }
-        
-        .error-msg { color: #dc3545; font-size: 12px; text-align: center; margin-top: 10px; display: none; font-weight: 500; }
-        .hidden { display: none; }
+
+        .calculator-card, .payment-card, .stats-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .price-result {
+            background: rgba(79, 70, 229, 0.1);
+            border: 1px dashed var(--primary);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #818cf8;
+        }
+
+        .payment-info {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .payment-info strong {
+            color: var(--text-main);
+        }
+
+        .owner-name {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        /* Stats & Graph */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box span {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .stat-box strong {
+            font-size: 15px;
+            color: var(--text-main);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 180px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <!-- Halaman Login -->
-    <div id="login-section">
-        <div class="logo-header">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo">
-            <h1>Master Store Pedia</h1>
-            <p class="subtitle">Silakan masukkan sandi untuk mengakses layanan</p>
+    <div class="container">
+        <!-- LOGIN SECTION -->
+        <div id="login-section">
+            <h2>Master Store Pedia</h2>
+            <p>Masukkan PIN Akses Keamanan Anda</p>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="pin-input" placeholder="Masukkan PIN (Contoh: OK BAIK)">
+            </div>
+            <button onclick="handleLogin()">Masuk Dashboard</button>
+            <div id="login-error" class="error-msg hidden">PIN Salah! Silakan coba lagi.</div>
         </div>
-        <div class="form-group">
-            <label for="password-input">Kata Sandi</label>
-            <input type="password" id="password-input" placeholder="Masukkan PIN/Sandi...">
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard-section" class="hidden">
+            <div class="dashboard-header">
+                <h1><i class="fa-solid fa-store" style="color: var(--accent);"></i> Panel Layanan</h1>
+                <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</button>
+            </div>
+
+            <!-- CALCULATOR & ORDER FORM -->
+            <div class="calculator-card">
+                <div class="section-title"><i class="fa-solid fa-calculator"></i> Kalkulator & Format Order</div>
+                
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <i class="fa-solid fa-list-check" style="top: 27px;"></i>
+                    <select id="service-select" onchange="calculatePrice()">
+                        <option value="" disabled selected>Pilih Jenis Layanan</option>
+                        <option value="Instagram Followers (1000)" data-price="15000">Instagram Followers (1K) - Rp 15.000</option>
+                        <option value="Instagram Likes (1000)" data-price="5000">Instagram Likes (1K) - Rp 5.000</option>
+                        <option value="Instagram Comments (100)" data-price="10000">Instagram Comments (100) - Rp 10.000</option>
+                        <option value="Web Development Standard" data-price="150000">Jasa Pembuatan Web Standard - Rp 150.000</option>
+                        <option value="APK Development Custom" data-price="300000">Jasa Pembuatan APK Custom - Rp 300.000</option>
+                    </select>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <i class="fa-solid fa-hashtag" style="top: 27px;"></i>
+                    <input type="number" id="qty-input" placeholder="Jumlah (Quantity / Porsi)" value="1" min="1" oninput="calculatePrice()">
+                </div>
+
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <i class="fa-solid fa-link" style="top: 27px;"></i>
+                    <input type="text" id="target-input" placeholder="Username / Link Tujuan (Contoh: @username / URL)">
+                </div>
+
+                <div class="price-result" id="price-display">Total: Rp 0</div>
+
+                <button onclick="sendOrder()"><i class="fa-brands fa-whatsapp"></i> Konfirmasi ke WhatsApp</button>
+            </div>
+
+            <!-- PAYMENT INFORMATION -->
+            <div class="payment-card">
+                <div class="section-title"><i class="fa-solid fa-wallet"></i> Metode Pembayaran</div>
+                <div class="payment-info">
+                    <div><strong>DANA:</strong> 082139291979</div>
+                    <div><strong>SeaBank:</strong> 901917713714</div>
+                </div>
+                <div class="owner-name"><i class="fa-solid fa-shield-check"></i> Atas Nama: MOCH MASTUR RIDO HAQIQI</div>
+            </div>
+
+            <!-- MONTHLY STATS & GRAPH SECTION -->
+            <div class="stats-card">
+                <div class="section-title"><i class="fa-solid fa-chart-line"></i> Rekap Transaksi Bulanan</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span>Total Transaksi Bulan Ini</span>
+                        <strong id="total-tx">24 Order</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Pendapatan Bulan Ini</span>
+                        <strong id="total-revenue">Rp 1.250.000</strong>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
         </div>
-        <button class="btn" onclick="cekLogin()">Masuk Aplikasi</button>
-        <div id="error-alert" class="error-msg">⚠️ Kata sandi salah, silakan coba lagi!</div>
     </div>
 
-    <!-- Halaman Utama (Aplikasi) -->
-    <div id="main-section" class="hidden">
-        <div class="logo-header">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo">
-            <h1>Master Store Pedia</h1>
-            <p class="subtitle">Pusat Layanan Followers & Jasa Digital Terpercaya</p>
-        </div>
-
-        <!-- Pilihan Layanan -->
-        <div class="form-group">
-            <label for="layanan">Pilih Layanan</label>
-            <select id="layanan" onchange="hitungHarga()">
-                <option value="shopee">Shopee Followers</option>
-                <option value="tiktok">TikTok Followers</option>
-                <option value="instagram">Instagram Followers</option>
-                <option value="views">All Medsos Views (Rp 50.000 / 1.000)</option>
-                <option value="yt_sub">YouTube Subscribe (Rp 65.000 / 100)</option>
-                <option value="like_all">Like TikTok / IG / FB (Rp 50.000 / 200)</option>
-                <option value="comment_all">Comment TikTok / IG / FB (Rp 50.000 / 1K)</option>
-                <option value="web_apk">Jasa Pembuatan Web / APK (Rp 550.000)</option>
-            </select>
-        </div>
-
-        <!-- Jumlah Order -->
-        <div class="form-group">
-            <label for="jumlah">Jumlah Kelipatan / Target</label>
-            <input type="number" id="jumlah" placeholder="Contoh: 1000" oninput="hitungHarga()">
-        </div>
-
-        <!-- Total Harga -->
-        <div class="price-box">
-            <small>Total Harga</small>
-            <span id="total-harga">Rp 0</span>
-        </div>
-
-        <!-- Informasi Pembayaran & Kontak -->
-        <div class="payment-box">
-            <h3>💳 Metode Pembayaran</h3>
-            <p><strong>DANA:</strong> 082139291979</p>
-            <p><strong>SEABANK:</strong> 901917713714</p>
-            <p style="margin-top: 6px;"><strong>Atas Nama:</strong> MOCH MASTUR RIDO HAQIQI</p>
-            <p style="font-size: 11px; color: #666; margin-top: 8px;">*Silakan transfer sesuai total harga, lalu kirimkan bukti transfer melalui WhatsApp.</p>
-        </div>
-
-        <!-- Tombol Konfirmasi WhatsApp -->
-        <a href="https://wa.me/6281359887835?text=Halo%20Master%20Store%20Pedia,%20saya%20mau%20konfirmasi%20pesanan%20saya." target="_blank" class="btn btn-wa">
-            💬 Konfirmasi & Order via WhatsApp
-        </a>
-    </div>
-</div>
-
-<script>
-    // Sandi paten masuk web
-    const PIN_RAHASIA = "OK BAIK"; 
-
-    function cekLogin() {
-        const inputSandi = document.getElementById('password-input').value;
-        const errorAlert = document.getElementById('error-alert');
-
-        if (inputSandi === PIN_RAHASIA) {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('main-section').classList.remove('hidden');
-        } else {
-            errorAlert.style.display = 'block';
-        }
-    }
-
-    const hargaLayanan = {
-        shopee: 65000,
-        tiktok: 85000,
-        instagram: 90000,
-        views: 50000,
-        yt_sub: 655,
-        like_all: 250,
-        comment_all: 50000,
-        web_apk: 550000
-    };
-
-    function hitungHarga() {
-        const layanan = document.getElementById('layanan').value;
-        const jumlah = parseInt(document.getElementById('jumlah').value) || 0;
-        let total = 0;
-
-        if (layanan === 'yt_sub') {
-            total = jumlah * hargaLayanan.yt_sub;
-        } else if (layanan === 'like_all') {
-            total = jumlah * hargaLayanan.like_all;
-        } else if (layanan === 'comment_all') {
-            total = jumlah * hargaLayanan.comment_all;
-        } else if (layanan === 'web_apk') {
-            total = hargaLayanan.web_apk;
-        } else {
-            total = (jumlah / 1000) * hargaLayanan[layanan];
+    <script>
+        // Login Logic
+        function handleLogin() {
+            const pin = document.getElementById('pin-input').value.trim();
+            // PIN sesuai instruksi: "OK BAIK" (case-insensitive)
+            if (pin.toUpperCase() === "OK BAIK") {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
+                initChart(); // Render grafik setelah masuk dashboard
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
         }
 
-        document.getElementById('total-harga').innerText = 'Rp ' + total.toLocaleString('id-ID');
-    }
-</script>
+        function handleLogout() {
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('pin-input').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+        }
 
+        // Calculator Logic
+        function calculatePrice() {
+            const select = document.getElementById('service-select');
+            const qty = parseInt(document.getElementById('qty-input').value) || 1;
+            
+            if (select.selectedIndex === 0) {
+                document.getElementById('price-display').innerText = "Total: Rp 0";
+                return 0;
+            }
+
+            const basePrice = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
+            const totalPrice = basePrice * qty;
+
+            document.getElementById('price-display').innerText = "Total: " + formatRupiah(totalPrice);
+            return totalPrice;
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
+        }
+
+        // Send Order to WhatsApp with Complete Details
+        function sendOrder() {
+            const select = document.getElementById('service-select');
+            const qty = document.getElementById('qty-input').value;
+            const target = document.getElementById('target-input').value.trim();
+
+            if (select.selectedIndex === 0) {
+                alert("Silakan pilih jenis layanan terlebih dahulu!");
+                return;
+            }
+
+            if (!target) {
+                alert("Silakan masukkan Username atau Link tujuan!");
+                return;
+            }
+
+            const serviceName = select.options[select.selectedIndex].value;
+            const basePrice = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
+            const totalPrice = basePrice * (parseInt(qty) || 1);
+
+            // Susun pesan konfirmasi lengkap
+            const message = `Halo Admin, saya ingin memesan layanan Master Store Pedia:\n\n` +
+                            `• *Jenis Layanan*: ${serviceName}\n` +
+                            `• *Jumlah (Qty)*: ${qty}\n` +
+                            `• *Username / Link*: ${target}\n` +
+                            `• *Total Harga*: ${formatRupiah(totalPrice)}\n\n` +
+                            `Mohon segera diproses ya kak. Terima kasih!`;
+
+            const waUrl = `https://wa.me/6281359887835?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // Initialize Monthly Chart using Chart.js
+        function initChart() {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Pendapatan (ribu Rp)',
+                        data: [450, 600, 800, 950, 1100, 1250, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(6, 182, 212, 0.5)',
+                        borderColor: '#06b6d4',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8', font: { size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
