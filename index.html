@@ -5,137 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Store Pedia</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f7f6; color: #333; padding: 15px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 500px; background: #ffffff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; font-size: 24px; }
-        .subtitle { text-align: center; color: #7f8c8d; font-size: 14px; margin-bottom: 20px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #f4f7f6; font-family: sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 500px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; color: #34495e; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; outline: none; transition: 0.3s; }
-        input:focus, select:focus { border-color: #3498db; }
-        .price-box { background: #e8f4fd; border: 1px solid #3498db; padding: 15px; border-radius: 8px; text-align: center; margin: 20px 0; }
-        .price-box span { block; font-size: 14px; color: #2980b9; }
-        .price-box h2 { font-size: 26px; color: #2c3e50; margin-top: 5px; }
-        .payment-info { background: #f9f9f9; border: 1px dashed #bdc3c7; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .payment-title { font-weight: bold; font-size: 14px; margin-bottom: 8px; color: #2c3e50; }
-        .bank-card { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #e0e0e0; margin-bottom: 8px; }
-        .bank-details { font-size: 13px; }
-        .btn-copy { background: #3498db; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
-        .btn-copy:active { background: #2980b9; }
-        .btn-order { width: 100%; background: #25d366; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .btn-order:hover { background: #1ebe57; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        input:focus, select:focus { border-color: #007bff; outline: none; }
+        .price-box { background: #e8f4fd; padding: 15px; border-radius: 4px; text-align: center; margin-top: 20px; }
+        .price-box span { display: block; font-size: 20px; font-weight: bold; color: #007bff; margin-top: 5px; }
+        .btn { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+        .error-msg { color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h1>Master Store Pedia</h1>
-    <p class="subtitle">Layanan Penambah Followers & Views Berkualitas</p>
-
-    <!-- Pilihan Layanan -->
-    <div class="form-group">
-        <label for="layanan">Pilih Layanan</label>
-        <select id="layanan" onchange="hitungHarga()">
-            <option value="shopee">Shopee Followers (Rp 65.000 / 1K)</option>
-            <option value="tiktok">TikTok Followers (Rp 85.000 / 1K)</option>
-            <option value="instagram">Instagram Followers (Rp 90.000 / 1K)</option>
-            <option value="views">All Media Views (Rp 50.000 / 1K)</option>
-        </select>
+    <!-- Halaman Login -->
+    <div id="login-section">
+        <h1>Login Akses</h1>
+        <p class="subtitle">Master Store Pedia</p>
+        <div class="form-group">
+            <label for="password-input">Masukkan Kata Sandi</label>
+            <input type="password" id="password-input" placeholder="Masukkan PIN/Sandi...">
+        </div>
+        <button class="btn" onclick="cekLogin()">Masuk</button>
+        <div id="error-alert" class="error-msg">Kata sandi salah, silakan coba lagi!</div>
     </div>
 
-    <!-- Jumlah Order -->
-    <div class="form-group">
-        <label for="jumlah">Jumlah Kelipatan (per 1.000)</label>
-        <input type="number" id="jumlah" value="1" min="1" oninput="hitungHarga()">
-    </div>
+    <!-- Halaman Utama (Aplikasi) -->
+    <div id="main-section" class="hidden">
+        <h1>Master Store Pedia</h1>
+        <p class="subtitle">Layanan Penambahan Followers & Jasa Digital</p>
 
-    <!-- Input Target/Link -->
-    <div class="form-group">
-        <label for="target">Link Akun / Username Target</label>
-        <input type="text" id="target" placeholder="Contoh: @username atau link profile">
-    </div>
-
-    <!-- Kotak Total Harga -->
-    <div class="price-box">
-        <span>Total Pembayaran</span>
-        <h2 id="total-harga">Rp 65.000</h2>
-    </div>
-
-    <!-- Informasi Pembayaran -->
-    <div class="payment-info">
-        <div class="payment-title">Metode Pembayaran (A.N Moch Mastur Rido Haqiqi):</div>
-        
-        <div class="bank-card">
-            <div class="bank-details">
-                <strong>DANA</strong><br>
-                082139291979
-            </div>
-            <button class="btn-copy" onclick="copyText('082139291979')">Salin</button>
+        <!-- Pilihan Layanan -->
+        <div class="form-group">
+            <label for="layanan">Pilih Layanan</label>
+            <select id="layanan" onchange="hitungHarga()">
+                <option value="shopee">Shopee Followers</option>
+                <option value="tiktok">TikTok Followers</option>
+                <option value="instagram">Instagram Followers</option>
+                <option value="views">All Medsos Views (Rp 50.000 / 1.000)</option>
+                <option value="yt_sub">YouTube Subscribe (Rp 65.000 / 100)</option>
+                <option value="like_all">Like TikTok / IG / FB (Rp 50.000 / 200)</option>
+                <option value="comment_all">Comment TikTok / IG / FB (Rp 50.000 / 1K)</option>
+                <option value="web_apk">Jasa Pembuatan Web / APK (Rp 550.000)</option>
+            </select>
         </div>
 
-        <div class="bank-card">
-            <div class="bank-details">
-                <strong>SeaBank</strong><br>
-                901917713714
-            </div>
-            <button class="btn-copy" onclick="copyText('901917713714')">Salin</button>
+        <!-- Jumlah Order -->
+        <div class="form-group">
+            <label for="jumlah">Jumlah Kelipatan / Target</label>
+            <input type="number" id="jumlah" placeholder="Masukkan jumlah..." oninput="hitungHarga()">
+        </div>
+
+        <!-- Total Harga -->
+        <div class="price-box">
+            Total Harga:
+            <span id="total-harga">Rp 0</span>
         </div>
     </div>
-
-    <!-- Tombol Kirim -->
-    <button class="btn-order" onclick="kirimOrder()">
-        🛒 Kirim Order via WhatsApp
-    </button>
 </div>
 
 <script>
-    // Data Harga per 1000
+    // Sandi sudah diset paten di sini
+    const PIN_RAHASIA = "OK BAIK"; 
+
+    function cekLogin() {
+        const inputSandi = document.getElementById('password-input').value;
+        const errorAlert = document.getElementById('error-alert');
+
+        if (inputSandi === PIN_RAHASIA) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('main-section').classList.remove('hidden');
+        } else {
+            errorAlert.style.display = 'block';
+        }
+    }
+
     const hargaLayanan = {
         shopee: 65000,
         tiktok: 85000,
         instagram: 90000,
-        views: 50000
+        views: 50000,
+        yt_sub: 655,
+        like_all: 250,
+        comment_all: 50000,
+        web_apk: 550000
     };
 
     function hitungHarga() {
         const layanan = document.getElementById('layanan').value;
-        const jumlah = parseInt(document.getElementById('jumlah').value) || 1;
-        const total = hargaLayanan[layanan] * jumlah;
-        
-        document.getElementById('total-harga').innerText = 'Rp ' + total.toLocaleString('id-ID');
-    }
+        const jumlah = parseInt(document.getElementById('jumlah').value) || 0;
+        let total = 0;
 
-    function copyText(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Nomor rekening berhasil disalin: ' + text);
-        }).catch(err => {
-            alert('Gagal menyalin text');
-        });
-    }
-
-    function kirimOrder() {
-        const layananSelect = document.getElementById('layanan');
-        const namaLayanan = layananSelect.options[layananSelect.selectedIndex].text;
-        const jumlah = document.getElementById('jumlah').value;
-        const target = document.getElementById('target').value;
-        const totalHarga = document.getElementById('total-harga').innerText;
-
-        if (!target) {
-            alert('Silakan isi Link Akun / Username Target terlebih dahulu!');
-            return;
+        if (layanan === 'yt_sub') {
+            total = jumlah * hargaLayanan.yt_sub;
+        } else if (layanan === 'like_all') {
+            total = jumlah * hargaLayanan.like_all;
+        } else if (layanan === 'comment_all') {
+            total = jumlah * hargaLayanan.comment_all;
+        } else if (layanan === 'web_apk') {
+            total = hargaLayanan.web_apk;
+        } else {
+            total = (jumlah / 1000) * hargaLayanan[layanan];
         }
 
-        // Format pesan WhatsApp
-        const nomorWA = '6282139291979'; 
-        const teksPesan = `Halo Master Store Pedia, saya ingin konfirmasi order:%0A%0A` +
-                          `• *Layanan:* ${namaLayanan}%0A` +
-                          `• *Jumlah:* ${jumlah} K (Kelipatan)%0A` +
-                          `• *Target:* ${target}%0A` +
-                          `• *Total Transfer:* ${totalHarga}%0A%0A` +
-                          `Saya sudah melakukan transfer, mohon segera diproses ya.`;
-
-        window.open(`https://wa.me/${nomorWA}?text=${teksPesan}`, '_blank');
+        document.getElementById('total-harga').innerText = 'Rp ' + total.toLocaleString('id-ID');
     }
 </script>
 
