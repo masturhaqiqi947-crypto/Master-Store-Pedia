@@ -6,24 +6,107 @@
     <title>Master Store Pedia</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #f4f7f6; font-family: sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 500px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-        input:focus, select:focus { border-color: #007bff; outline: none; }
-        .price-box { background: #e8f4fd; padding: 15px; border-radius: 4px; text-align: center; margin-top: 20px; }
-        .price-box span { display: block; font-size: 20px; font-weight: bold; color: #007bff; margin-top: 5px; }
-        .payment-box { background: #fdfefe; border: 1px dashed #007bff; padding: 15px; border-radius: 4px; margin-top: 20px; font-size: 14px; color: #333; }
-        .payment-box h3 { font-size: 15px; margin-bottom: 8px; color: #007bff; }
-        .payment-box p { margin-bottom: 5px; }
-        .btn { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        body { 
+            background: linear-gradient(135deg, #007bff, #00c6ff); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .app-container { 
+            width: 100%; 
+            max-width: 480px; 
+            background: #ffffff; 
+            padding: 25px; 
+            border-radius: 14px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+        }
+        .logo-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-header img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #007bff;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 { text-align: center; color: #222; font-size: 22px; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 13px; font-weight: 500; }
+        
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #444; font-size: 14px; }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus { 
+            border-color: #007bff; 
+            background: #fff;
+            outline: none; 
+            box-shadow: 0 0 5px rgba(0,123,255,0.2);
+        }
+        
+        .price-box { 
+            background: linear-gradient(135deg, #e8f4fd, #d0e8fc); 
+            padding: 15px; 
+            border-radius: 8px; 
+            text-align: center; 
+            margin-top: 20px; 
+            border: 1px solid #bce8f1;
+        }
+        .price-box small { color: #555; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .price-box span { display: block; font-size: 22px; font-weight: bold; color: #0056b3; margin-top: 5px; }
+        
+        .payment-box { 
+            background: #fffcf4; 
+            border: 1px solid #ffeeba; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            font-size: 13px; 
+            color: #444; 
+        }
+        .payment-box h3 { font-size: 14px; margin-bottom: 10px; color: #856404; display: flex; align-items: center; gap: 5px; }
+        .payment-box p { margin-bottom: 6px; }
+        
+        .btn { 
+            width: 100%; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: background 0.2s;
+        }
         .btn:hover { background: #0056b3; }
-        .btn-wa { background: #28a745; margin-top: 15px; text-decoration: none; display: block; text-align: center; }
-        .btn-wa:hover { background: #218838; }
-        .error-msg { color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
+        
+        .btn-wa { 
+            background: #25d366; 
+            margin-top: 15px; 
+            text-decoration: none; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 8px;
+        }
+        .btn-wa:hover { background: #1ebe5d; }
+        
+        .error-msg { color: #dc3545; font-size: 12px; text-align: center; margin-top: 10px; display: none; font-weight: 500; }
         .hidden { display: none; }
     </style>
 </head>
@@ -32,20 +115,26 @@
 <div class="app-container">
     <!-- Halaman Login -->
     <div id="login-section">
-        <h1>Login Akses</h1>
-        <p class="subtitle">Master Store Pedia</p>
+        <div class="logo-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo">
+            <h1>Master Store Pedia</h1>
+            <p class="subtitle">Silakan masukkan sandi untuk mengakses layanan</p>
+        </div>
         <div class="form-group">
-            <label for="password-input">Masukkan Kata Sandi</label>
+            <label for="password-input">Kata Sandi</label>
             <input type="password" id="password-input" placeholder="Masukkan PIN/Sandi...">
         </div>
-        <button class="btn" onclick="cekLogin()">Masuk</button>
-        <div id="error-alert" class="error-msg">Kata sandi salah, silakan coba lagi!</div>
+        <button class="btn" onclick="cekLogin()">Masuk Aplikasi</button>
+        <div id="error-alert" class="error-msg">⚠️ Kata sandi salah, silakan coba lagi!</div>
     </div>
 
     <!-- Halaman Utama (Aplikasi) -->
     <div id="main-section" class="hidden">
-        <h1>Master Store Pedia</h1>
-        <p class="subtitle">Layanan Penambahan Followers & Jasa Digital</p>
+        <div class="logo-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo">
+            <h1>Master Store Pedia</h1>
+            <p class="subtitle">Pusat Layanan Followers & Jasa Digital Terpercaya</p>
+        </div>
 
         <!-- Pilihan Layanan -->
         <div class="form-group">
@@ -65,27 +154,27 @@
         <!-- Jumlah Order -->
         <div class="form-group">
             <label for="jumlah">Jumlah Kelipatan / Target</label>
-            <input type="number" id="jumlah" placeholder="Masukkan jumlah..." oninput="hitungHarga()">
+            <input type="number" id="jumlah" placeholder="Contoh: 1000" oninput="hitungHarga()">
         </div>
 
         <!-- Total Harga -->
         <div class="price-box">
-            Total Harga:
+            <small>Total Harga</small>
             <span id="total-harga">Rp 0</span>
         </div>
 
         <!-- Informasi Pembayaran & Kontak -->
         <div class="payment-box">
-            <h3>Metode Pembayaran:</h3>
+            <h3>💳 Metode Pembayaran</h3>
             <p><strong>DANA:</strong> 082139291979</p>
             <p><strong>SEABANK:</strong> 901917713714</p>
             <p style="margin-top: 6px;"><strong>Atas Nama:</strong> MOCH MASTUR RIDO HAQIQI</p>
-            <p style="font-size: 12px; color: #666; margin-top: 8px;">*Silakan transfer sesuai total harga, lalu kirim bukti pembayaran ke WhatsApp kami.</p>
+            <p style="font-size: 11px; color: #666; margin-top: 8px;">*Silakan transfer sesuai total harga, lalu kirimkan bukti transfer melalui WhatsApp.</p>
         </div>
 
         <!-- Tombol Konfirmasi WhatsApp -->
         <a href="https://wa.me/6281359887835?text=Halo%20Master%20Store%20Pedia,%20saya%20mau%20konfirmasi%20pesanan%20saya." target="_blank" class="btn btn-wa">
-            Kirim Bukti & Order via WhatsApp
+            💬 Konfirmasi & Order via WhatsApp
         </a>
     </div>
 </div>
