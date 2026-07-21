@@ -16,8 +16,13 @@
         input:focus, select:focus { border-color: #007bff; outline: none; }
         .price-box { background: #e8f4fd; padding: 15px; border-radius: 4px; text-align: center; margin-top: 20px; }
         .price-box span { display: block; font-size: 20px; font-weight: bold; color: #007bff; margin-top: 5px; }
-        .btn { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .payment-box { background: #fdfefe; border: 1px dashed #007bff; padding: 15px; border-radius: 4px; margin-top: 20px; font-size: 14px; color: #333; }
+        .payment-box h3 { font-size: 15px; margin-bottom: 8px; color: #007bff; }
+        .payment-box p { margin-bottom: 5px; }
+        .btn { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .btn:hover { background: #0056b3; }
+        .btn-wa { background: #28a745; margin-top: 15px; text-decoration: none; display: block; text-align: center; }
+        .btn-wa:hover { background: #218838; }
         .error-msg { color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
         .hidden { display: none; }
     </style>
@@ -68,11 +73,25 @@
             Total Harga:
             <span id="total-harga">Rp 0</span>
         </div>
+
+        <!-- Informasi Pembayaran & Kontak -->
+        <div class="payment-box">
+            <h3>Metode Pembayaran:</h3>
+            <p><strong>DANA:</strong> 082139291979</p>
+            <p><strong>SEABANK:</strong> 901917713714</p>
+            <p style="margin-top: 6px;"><strong>Atas Nama:</strong> MOCH MASTUR RIDO HAQIQI</p>
+            <p style="font-size: 12px; color: #666; margin-top: 8px;">*Silakan transfer sesuai total harga, lalu kirim bukti pembayaran ke WhatsApp kami.</p>
+        </div>
+
+        <!-- Tombol Konfirmasi WhatsApp -->
+        <a href="https://wa.me/6281359887835?text=Halo%20Master%20Store%20Pedia,%20saya%20mau%20konfirmasi%20pesanan%20saya." target="_blank" class="btn btn-wa">
+            Kirim Bukti & Order via WhatsApp
+        </a>
     </div>
 </div>
 
 <script>
-    // Sandi sudah diset paten di sini
+    // Sandi paten masuk web
     const PIN_RAHASIA = "OK BAIK"; 
 
     function cekLogin() {
