@@ -50,12 +50,10 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* Hidden utility */
         .hidden {
             display: none !important;
         }
 
-        /* Login Screen */
         #login-section h2 {
             text-align: center;
             margin-bottom: 8px;
@@ -128,10 +126,6 @@
             transform: translateY(-1px);
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
-
         .error-msg {
             color: #f87171;
             font-size: 13px;
@@ -139,7 +133,6 @@
             margin-top: 10px;
         }
 
-        /* Dashboard Screen */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -213,7 +206,6 @@
             margin-bottom: 16px;
         }
 
-        /* Stats & Graph */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -277,17 +269,31 @@
                     <i class="fa-solid fa-list-check" style="top: 27px;"></i>
                     <select id="service-select" onchange="calculatePrice()">
                         <option value="" disabled selected>Pilih Jenis Layanan</option>
-                        <option value="Instagram Followers (1000)" data-price="15000">Instagram Followers (1K) - Rp 15.000</option>
-                        <option value="Instagram Likes (1000)" data-price="5000">Instagram Likes (1K) - Rp 5.000</option>
-                        <option value="Instagram Comments (100)" data-price="10000">Instagram Comments (100) - Rp 10.000</option>
-                        <option value="Web Development Standard" data-price="150000">Jasa Pembuatan Web Standard - Rp 150.000</option>
-                        <option value="APK Development Custom" data-price="300000">Jasa Pembuatan APK Custom - Rp 300.000</option>
+                        
+                        <!-- Web & Subscribe -->
+                        <option value="WEB APK Development" data-price="550000" data-type="unit">Jasa WEB / APK - Rp 550.000</option>
+                        <option value="Subscribe" data-price="600000" data-type="1k">Subscribe (per 1K) - Rp 600.000</option>
+
+                        <!-- Followers -->
+                        <option value="Shopee Followers" data-price="65000" data-type="1k">Shopee Followers (per 1K) - Rp 65.000</option>
+                        <option value="Instagram Followers" data-price="90000" data-type="1k">Instagram Followers (per 1K) - Rp 90.000</option>
+                        <option value="Tiktok Followers" data-price="90000" data-type="1k">Tiktok Followers (per 1K) - Rp 90.000</option>
+                        <option value="Facebook Followers" data-price="90000" data-type="1k">Facebook Followers (per 1K) - Rp 90.000</option>
+
+                        <!-- Views & Comment -->
+                        <option value="Shopee Views & Comment" data-price="50000" data-type="500">Shopee Views & Comment (per 500) - Rp 50.000</option>
+                        <option value="Instagram Views & Comment" data-price="50000" data-type="500">Instagram Views & Comment (per 500) - Rp 50.000</option>
+                        <option value="Tiktok Views & Comment" data-price="50000" data-type="500">Tiktok Views & Comment (per 500) - Rp 50.000</option>
+                        <option value="Facebook Views & Comment" data-price="50000" data-type="500">Facebook Views & Comment (per 500) - Rp 50.000</option>
+
+                        <!-- Live Stream -->
+                        <option value="Stream LIVE Shopee & Tiktok (15 min)" data-price="90000" data-type="unit">Stream LIVE Shopee & Tiktok (15 min) - Rp 90.000</option>
                     </select>
                 </div>
 
                 <div class="input-group" style="margin-bottom: 12px;">
                     <i class="fa-solid fa-hashtag" style="top: 27px;"></i>
-                    <input type="number" id="qty-input" placeholder="Jumlah (Quantity / Porsi)" value="1" min="1" oninput="calculatePrice()">
+                    <input type="number" id="qty-input" placeholder="Jumlah (Quantity)" value="1000" min="1" oninput="calculatePrice()">
                 </div>
 
                 <div class="input-group" style="margin-bottom: 12px;">
@@ -331,14 +337,13 @@
     </div>
 
     <script>
-        // Login Logic
         function handleLogin() {
             const pin = document.getElementById('pin-input').value.trim();
-            // PIN sesuai instruksi: "OK BAIK" (case-insensitive)
             if (pin.toUpperCase() === "OK BAIK") {
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('dashboard-section').classList.remove('hidden');
-                initChart(); // Render grafik setelah masuk dashboard
+                initChart();
+                calculatePrice();
             } else {
                 document.getElementById('login-error').classList.remove('hidden');
             }
@@ -351,18 +356,30 @@
             document.getElementById('login-error').classList.add('hidden');
         }
 
-        // Calculator Logic
+        // Kalkulasi Harga Akurat Berdasarkan Basis Satuan/Paket
         function calculatePrice() {
             const select = document.getElementById('service-select');
-            const qty = parseInt(document.getElementById('qty-input').value) || 1;
+            const qtyInput = document.getElementById('qty-input');
+            const qty = parseInt(qtyInput.value) || 0;
             
             if (select.selectedIndex === 0) {
                 document.getElementById('price-display').innerText = "Total: Rp 0";
                 return 0;
             }
 
-            const basePrice = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
-            const totalPrice = basePrice * qty;
+            const selectedOption = select.options[select.selectedIndex];
+            const basePrice = parseInt(selectedOption.getAttribute('data-price'));
+            const calcType = selectedOption.getAttribute('data-type');
+
+            let totalPrice = 0;
+
+            if (calcType === '1k') {
+                totalPrice = (basePrice / 1000) * qty;
+            } else if (calcType === '500') {
+                totalPrice = (basePrice / 500) * qty;
+            } else {
+                totalPrice = basePrice * (qty > 0 ? qty : 1);
+            }
 
             document.getElementById('price-display').innerText = "Total: " + formatRupiah(totalPrice);
             return totalPrice;
@@ -372,7 +389,7 @@
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
         }
 
-        // Send Order to WhatsApp with Complete Details
+        // Kirim Detail Lengkap ke WhatsApp
         function sendOrder() {
             const select = document.getElementById('service-select');
             const qty = document.getElementById('qty-input').value;
@@ -388,23 +405,20 @@
                 return;
             }
 
-            const serviceName = select.options[select.selectedIndex].value;
-            const basePrice = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
-            const totalPrice = basePrice * (parseInt(qty) || 1);
+            const serviceName = select.options[select.selectedIndex].text;
+            const finalPrice = calculatePrice();
 
-            // Susun pesan konfirmasi lengkap
             const message = `Halo Admin, saya ingin memesan layanan Master Store Pedia:\n\n` +
                             `• *Jenis Layanan*: ${serviceName}\n` +
                             `• *Jumlah (Qty)*: ${qty}\n` +
                             `• *Username / Link*: ${target}\n` +
-                            `• *Total Harga*: ${formatRupiah(totalPrice)}\n\n` +
+                            `• *Total Harga*: ${formatRupiah(finalPrice)}\n\n` +
                             `Mohon segera diproses ya kak. Terima kasih!`;
 
             const waUrl = `https://wa.me/6281359887835?text=${encodeURIComponent(message)}`;
             window.open(waUrl, '_blank');
         }
 
-        // Initialize Monthly Chart using Chart.js
         function initChart() {
             const ctx = document.getElementById('monthlyChart').getContext('2d');
             new Chart(ctx, {
