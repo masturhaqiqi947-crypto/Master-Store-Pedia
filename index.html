@@ -188,6 +188,18 @@
             color: #818cf8;
         }
 
+        .payment-notice {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #38bdf8;
+            font-weight: 500;
+        }
+
         .payment-info {
             font-size: 13px;
             color: var(--text-muted);
@@ -302,6 +314,11 @@
                 </div>
 
                 <div class="price-result" id="price-display">Total: Rp 0</div>
+                
+                <!-- Pemberitahuan Lakukan Payment Sebelum Konfirmasi -->
+                <div class="payment-notice">
+                    <i class="fa-solid fa-circle-exclamation"></i> Harap lakukan pembayaran terlebih dahulu sebelum konfirmasi ke WhatsApp!
+                </div>
 
                 <button onclick="sendOrder()"><i class="fa-brands fa-whatsapp"></i> Konfirmasi ke WhatsApp</button>
             </div>
@@ -356,7 +373,6 @@
             document.getElementById('login-error').classList.add('hidden');
         }
 
-        // Kalkulasi Harga Akurat Berdasarkan Basis Satuan/Paket
         function calculatePrice() {
             const select = document.getElementById('service-select');
             const qtyInput = document.getElementById('qty-input');
@@ -389,7 +405,6 @@
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
         }
 
-        // Kirim Detail Lengkap ke WhatsApp
         function sendOrder() {
             const select = document.getElementById('service-select');
             const qty = document.getElementById('qty-input').value;
@@ -408,12 +423,12 @@
             const serviceName = select.options[select.selectedIndex].text;
             const finalPrice = calculatePrice();
 
-            const message = `Halo Admin, saya ingin memesan layanan Master Store Pedia:\n\n` +
+            const message = `lakukan pembayaran dan konfirmasi pesanan layanan Master Store Pedia:\n\n` +
                             `• *Jenis Layanan*: ${serviceName}\n` +
                             `• *Jumlah (Qty)*: ${qty}\n` +
                             `• *Username / Link*: ${target}\n` +
                             `• *Total Harga*: ${formatRupiah(finalPrice)}\n\n` +
-                            `Mohon segera diproses ya kak. Terima kasih!`;
+                            `Berikut saya lampirkan bukti pembayarannya. Mohon segera diproses ya kak. Terima kasih!`;
 
             const waUrl = `https://wa.me/6281359887835?text=${encodeURIComponent(message)}`;
             window.open(waUrl, '_blank');
