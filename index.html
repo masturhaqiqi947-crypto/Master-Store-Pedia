@@ -14,9 +14,8 @@
             --primary: #4f46e5;
             --primary-dark: #4338ca;
             --accent: #06b6d4;
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(15, 23, 42, 0.75); /* Sedikit lebih pekat agar kontras dengan background foto */
+            --card-border: rgba(255, 255, 255, 0.15);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -29,7 +28,11 @@
         }
 
         body {
-            background: var(--bg-gradient);
+            /* Menggunakan foto setup Anda sebagai background dengan efek gelap di atasnya */
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.92)), url('1000484473.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -47,7 +50,7 @@
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
 
         .hidden {
@@ -87,7 +90,7 @@
         input, select, textarea {
             width: 100%;
             padding: 14px 16px 14px 45px;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--card-border);
             border-radius: 12px;
             color: var(--text-main);
@@ -104,7 +107,7 @@
 
         input:focus, select:focus, textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
         }
 
         button {
@@ -168,8 +171,8 @@
             gap: 8px;
         }
 
-        .calculator-card, .payment-card, .stats-card {
-            background: rgba(15, 23, 42, 0.4);
+        .calculator-card, .payment-card, .stats-card, .history-card {
+            background: rgba(15, 23, 42, 0.5);
             border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 20px;
@@ -177,7 +180,7 @@
         }
 
         .price-result {
-            background: rgba(79, 70, 229, 0.1);
+            background: rgba(79, 70, 229, 0.15);
             border: 1px dashed var(--primary);
             border-radius: 12px;
             padding: 12px;
@@ -189,7 +192,7 @@
         }
 
         .payment-notice {
-            background: rgba(6, 182, 212, 0.1);
+            background: rgba(6, 182, 212, 0.15);
             border: 1px solid rgba(6, 182, 212, 0.3);
             border-radius: 12px;
             padding: 12px;
@@ -248,6 +251,39 @@
             position: relative;
             height: 180px;
             width: 100%;
+        }
+
+        /* History Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        th {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        td {
+            color: var(--text-muted);
+        }
+
+        td.highlight-price {
+            color: #38bdf8;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -350,6 +386,49 @@
                     <canvas id="monthlyChart"></canvas>
                 </div>
             </div>
+
+            <!-- RECENT SALES HISTORY TABLE -->
+            <div class="history-card">
+                <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Penjualan Jasa</div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Layanan</th>
+                                <th>Target</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <tr>
+                                <td>20 Jul 2026</td>
+                                <td>Instagram Followers</td>
+                                <td>@store_pedia</td>
+                                <td class="highlight-price">Rp 90.000</td>
+                            </tr>
+                            <tr>
+                                <td>18 Jul 2026</td>
+                                <td>WEB / APK Development</td>
+                                <td>Client UMKM</td>
+                                <td class="highlight-price">Rp 550.000</td>
+                            </tr>
+                            <tr>
+                                <td>15 Jul 2026</td>
+                                <td>Shopee Followers</td>
+                                <td>@tokomurah</td>
+                                <td class="highlight-price">Rp 65.000</td>
+                            </tr>
+                            <tr>
+                                <td>12 Jul 2026</td>
+                                <td>Stream LIVE Shopee & Tiktok</td>
+                                <td>Live Session</td>
+                                <td class="highlight-price">Rp 90.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -423,7 +502,7 @@
             const serviceName = select.options[select.selectedIndex].text;
             const finalPrice = calculatePrice();
 
-            const message = `lakukan pembayaran dan konfirmasi pesanan layanan Master Store Pedia:\n\n` +
+            const message = `Halo Admin, saya sudah melakukan pembayaran dan ingin memesan layanan Master Store Pedia:\n\n` +
                             `• *Jenis Layanan*: ${serviceName}\n` +
                             `• *Jumlah (Qty)*: ${qty}\n` +
                             `• *Username / Link*: ${target}\n` +
